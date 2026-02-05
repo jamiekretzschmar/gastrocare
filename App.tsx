@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, CalendarDays, BookOpen, Activity, Stethoscope, Building2, Flame, Pill, HelpCircle } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, BookOpen, Activity, Stethoscope, Building2, Flame, Pill, HelpCircle, Github, Menu } from 'lucide-react';
 import Tracker from './components/Tracker';
 import MealPlan from './components/MealPlan';
 import Guidelines from './components/Guidelines';
@@ -48,6 +48,24 @@ function App() {
     setMealPlan(safeLocalStorage.getItem('gastroMealPlan', MEAL_PLAN));
   }, []);
 
+  // Safe Notification Helper
+  const sendNotification = (title: string, options?: NotificationOptions) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(title, options);
+      } catch (e) {
+        console.warn('Notification failed', e);
+      }
+    }
+  };
+
+  // Safe Permission Request
+  const requestNotificationPermission = () => {
+    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission();
+    }
+  };
+
   // Hydration Reminder Logic
   useEffect(() => {
     if (!hydrationSettings.enabled) return;
@@ -55,16 +73,16 @@ function App() {
     const checkReminders = () => {
       const now = new Date();
       const currentHm = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-      if (hydrationSettings.reminderTimes.includes(currentHm)) {
-        new Notification("Hydration Reminder", { 
+      if (hydrationSettings.reminderTimes && hydrationSettings.reminderTimes.includes(currentHm)) {
+        sendNotification("Hydration Reminder", { 
           body: "It's time to drink some water!",
           icon: "/vite.svg" 
         });
       }
     };
 
-    if (Notification.permission !== 'granted' && hydrationSettings.enabled) {
-      Notification.requestPermission();
+    if (hydrationSettings.enabled) {
+      requestNotificationPermission();
     }
 
     const intervalId = setInterval(checkReminders, 60000); 
@@ -75,7 +93,7 @@ function App() {
   useEffect(() => {
     if (!hydrationSettings.enabled || hydrationSettings.reminderIntervalMinutes <= 0) return;
     const intervalId = setInterval(() => {
-       new Notification("Hydration Check", {
+       sendNotification("Hydration Check", {
          body: `Remember to sip water! Interval: ${hydrationSettings.reminderIntervalMinutes}m`,
        });
     }, hydrationSettings.reminderIntervalMinutes * 60 * 1000);
@@ -84,13 +102,15 @@ function App() {
 
   // Medication Notification Logic
   useEffect(() => {
+    if (!Array.isArray(medications)) return;
+
     const checkMeds = () => {
       const now = new Date();
       const currentHm = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
       
       medications.forEach(med => {
         if (med.enabled && med.time === currentHm) {
-           new Notification("Medication Reminder", {
+           sendNotification("Medication Reminder", {
              body: `Time to take ${med.name} (${med.dosage})`,
            });
         }
@@ -121,14 +141,14 @@ function App() {
                      </button>
                      <button 
                        onClick={() => setFlareMode(!flareMode)}
-                       className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                       className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm active:scale-95 ${
                          flareMode 
-                         ? 'bg-red-600 text-white shadow-md ring-2 ring-red-300' 
+                         ? 'bg-red-600 text-white shadow-red-200 ring-2 ring-red-100' 
                          : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
                        }`}
                      >
                        <Flame className={`w-4 h-4 ${flareMode ? 'fill-current' : ''}`} />
-                       Flare-Up Mode: {flareMode ? 'ON' : 'OFF'}
+                       <span className="hidden sm:inline">Flare-Up Mode:</span> {flareMode ? 'ON' : 'OFF'}
                      </button>
                    </div>
                 </div>
@@ -179,7 +199,7 @@ function App() {
                </button>
                <button 
                      onClick={() => setFlareMode(!flareMode)}
-                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all active:scale-95 ${
                        flareMode 
                        ? 'bg-red-600 text-white shadow-md ring-2 ring-red-300' 
                        : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
@@ -215,53 +235,98 @@ function App() {
   const NavBtn = ({ tab, icon: Icon }: { tab: Tab | 'Analytics', icon: any }) => (
     <button
       onClick={() => setActiveTab(tab as Tab)}
-      className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
+      className={`flex flex-col items-center gap-1 p-2 min-w-[4.5rem] rounded-xl transition-all select-none active:scale-95 ${
         activeTab === tab 
-          ? 'bg-teal-600 text-white shadow-lg scale-105' 
-          : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+          ? 'text-teal-600 bg-teal-50 font-bold' 
+          : 'text-slate-400 hover:text-slate-600'
       }`}
     >
-      <Icon className="w-6 h-6" />
-      <span className="text-xs font-medium text-center">{tab}</span>
+      <Icon className={`w-6 h-6 ${activeTab === tab ? 'stroke-[2.5px]' : ''}`} />
+      <span className="text-[10px] whitespace-nowrap">{tab === Tab.DASHBOARD ? 'Home' : tab.split(' ')[0]}</span>
     </button>
   );
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-24 md:pb-0 md:pl-24">
-      <nav className="fixed md:left-0 md:top-0 md:bottom-0 bottom-0 left-0 right-0 md:w-24 bg-white border-t md:border-t-0 md:border-r border-slate-200 z-50 flex md:flex-col justify-around md:justify-center md:gap-8 p-2 shadow-lg md:shadow-none overflow-y-auto hide-scrollbar">
-        <NavBtn tab={Tab.DASHBOARD} icon={LayoutDashboard} />
-        <NavBtn tab={Tab.MEAL_PLAN} icon={CalendarDays} />
-        <NavBtn tab={Tab.MEDS} icon={Pill} />
-        <NavBtn tab={Tab.TRACKER} icon={Activity} />
-        <NavBtn tab={Tab.GUIDELINES} icon={BookOpen} />
-        <NavBtn tab={Tab.CLINIC} icon={Building2} />
-        <NavBtn tab={Tab.ASSISTANT} icon={Stethoscope} />
-        <button
-           onClick={() => setActiveTab('Analytics' as any)}
-           className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
-             activeTab === 'Analytics' 
-               ? 'bg-teal-600 text-white shadow-lg scale-105' 
-               : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
-           }`}
-        >
-          <Activity className="w-6 h-6" />
-           <span className="text-xs font-medium">Analytics</span>
-        </button>
+      {/* Mobile-Optimized Header */}
+      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 z-40 md:static md:bg-transparent md:border-none md:p-8">
+         <div className="flex justify-between items-center max-w-7xl mx-auto">
+            <div>
+              <h1 className="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                <Activity className="w-6 h-6 text-teal-600 md:hidden" />
+                GastroCare Sync
+              </h1>
+              <p className="hidden md:block text-slate-500 mt-1">Daily management & safety protocol</p>
+            </div>
+            <div className="hidden md:block">
+              <span className="bg-teal-50 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold border border-teal-100">
+                Immunosuppressed Protocol Active
+              </span>
+            </div>
+            {/* Mobile Flare Toggle Mini */}
+            <div className="md:hidden">
+              <button 
+                  onClick={() => setFlareMode(!flareMode)}
+                  className={`p-2 rounded-full transition-all ${flareMode ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-400'}`}
+              >
+                  <Flame className={`w-5 h-5 ${flareMode ? 'fill-current' : ''}`} />
+              </button>
+            </div>
+         </div>
+      </header>
+
+      {/* Spacer for fixed header on mobile */}
+      <div className="h-16 md:hidden" />
+
+      {/* Navigation - Sidebar on Desktop, Horizontal Scroll Strip on Mobile */}
+      <nav className="fixed bottom-0 left-0 right-0 md:top-0 md:left-0 md:w-24 bg-white border-t md:border-t-0 md:border-r border-slate-200 z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] md:shadow-none">
+        
+        {/* Mobile: Horizontal Scroll Container */}
+        <div className="md:hidden w-full overflow-x-auto hide-scrollbar flex items-center gap-2 px-4 py-2">
+            <NavBtn tab={Tab.DASHBOARD} icon={LayoutDashboard} />
+            <NavBtn tab={Tab.TRACKER} icon={Activity} />
+            <NavBtn tab={Tab.MEAL_PLAN} icon={CalendarDays} />
+            <NavBtn tab={Tab.MEDS} icon={Pill} />
+            <NavBtn tab={Tab.ASSISTANT} icon={Stethoscope} />
+            <NavBtn tab={Tab.GUIDELINES} icon={BookOpen} />
+            <NavBtn tab={'Analytics' as any} icon={Activity} />
+            <NavBtn tab={Tab.CLINIC} icon={Building2} />
+        </div>
+
+        {/* Desktop: Vertical Column */}
+        <div className="hidden md:flex flex-col justify-center gap-8 h-full p-2 overflow-y-auto hide-scrollbar">
+            <NavBtn tab={Tab.DASHBOARD} icon={LayoutDashboard} />
+            <NavBtn tab={Tab.MEAL_PLAN} icon={CalendarDays} />
+            <NavBtn tab={Tab.MEDS} icon={Pill} />
+            <NavBtn tab={Tab.TRACKER} icon={Activity} />
+            <NavBtn tab={Tab.GUIDELINES} icon={BookOpen} />
+            <NavBtn tab={Tab.CLINIC} icon={Building2} />
+            <NavBtn tab={Tab.ASSISTANT} icon={Stethoscope} />
+            <button
+              onClick={() => setActiveTab('Analytics' as any)}
+              className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
+                activeTab === 'Analytics' 
+                  ? 'bg-teal-600 text-white shadow-lg scale-105' 
+                  : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+              }`}
+            >
+              <Activity className="w-6 h-6" />
+              <span className="text-xs font-medium">Analytics</span>
+            </button>
+            <a
+              href="https://github.com/jamiekretzschmar/gastrocare"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1 p-3 rounded-xl transition-all text-slate-400 hover:bg-slate-100 hover:text-slate-700 mt-auto"
+              title="View on GitHub"
+            >
+              <Github className="w-6 h-6" />
+              <span className="text-[10px] font-medium">Source</span>
+            </a>
+        </div>
       </nav>
 
       <main className="max-w-7xl mx-auto p-4 md:p-8">
-        <header className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">GastroCare Sync</h1>
-            <p className="text-slate-500 mt-1">Daily management & safety protocol</p>
-          </div>
-          <div className="hidden md:block">
-            <span className="bg-teal-50 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold border border-teal-100">
-              Immunosuppressed Protocol Active
-            </span>
-          </div>
-        </header>
-
         {renderContent()}
 
         {showFlareInfo && (

@@ -1,6 +1,27 @@
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || ''; 
+// Safely retrieve API key from Vite (import.meta.env) or Node/Webpack (process.env)
+const getApiKey = (): string => {
+  // 1. Try Vite environment variable
+  // @ts-ignore - import.meta is available in Vite environments
+  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  
+  // 2. Try process.env (Standard Node/Webpack)
+  try {
+    if (typeof process !== 'undefined' && process.env?.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    // Ignore ReferenceError if process is not defined
+  }
+  
+  return '';
+};
+
+const API_KEY = getApiKey();
 
 // We handle the case where API key might be missing gracefully in the UI
 let ai: GoogleGenAI | null = null;
@@ -10,11 +31,11 @@ if (API_KEY) {
 
 export const askDietitian = async (userQuery: string, context: string): Promise<string> => {
   if (!ai) {
-    return "Please configure your API Key to use the AI Dietitian.";
+    return "Please configure your API Key in the .env file (VITE_API_KEY) to use the AI Dietitian.";
   }
 
   try {
-    const model = 'gemini-2.5-flash-latest'; // Using the latest flash model for speed
+    const model = 'gemini-3-flash-preview'; // Updated to latest Flash model for text tasks
     
     const systemInstruction = `
       You are an expert Gastroenterology Dietitian specializing in Gastroparesis.

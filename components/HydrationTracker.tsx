@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Droplets, Bell, Settings, Plus, Minus, Clock } from 'lucide-react';
 import { HydrationEntry, HydrationSettings } from '../types';
+import { safeLocalStorage } from '../utils/storage';
 
 interface HydrationTrackerProps {
   entries: HydrationEntry[];
@@ -20,7 +21,7 @@ const HydrationTracker: React.FC<HydrationTrackerProps> = ({
     .filter(e => e.date.startsWith(today))
     .reduce((sum, e) => sum + e.amountMl, 0);
 
-  const progress = Math.min((todayTotal / settings.dailyGoalMl) * 100, 100);
+  const progress = Math.min((todayTotal / (settings.dailyGoalMl || 2000)) * 100, 100);
 
   const addWater = (amount: number) => {
     const newEntry: HydrationEntry = {
@@ -30,12 +31,12 @@ const HydrationTracker: React.FC<HydrationTrackerProps> = ({
     };
     const updated = [...entries, newEntry];
     setEntries(updated);
-    localStorage.setItem('hydrationLogs', JSON.stringify(updated));
+    safeLocalStorage.setItem('hydrationLogs', updated);
   };
 
   const saveSettings = (newSettings: HydrationSettings) => {
     setSettings(newSettings);
-    localStorage.setItem('hydrationSettings', JSON.stringify(newSettings));
+    safeLocalStorage.setItem('hydrationSettings', newSettings);
     
     // Request notification permission if enabled
     if (newSettings.enabled && Notification.permission !== 'granted') {

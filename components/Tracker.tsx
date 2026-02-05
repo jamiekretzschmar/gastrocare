@@ -159,14 +159,14 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
         </h2>
         
         {/* Quick Add Bar */}
-        <div className="mb-6 overflow-x-auto pb-2">
+        <div className="mb-6 overflow-x-auto pb-2 -mx-2 px-2">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Quick Add Safe Foods</p>
           <div className="flex gap-2">
             {QUICK_ADD_FOODS.map((q, i) => (
               <button 
                 key={i} 
                 onClick={() => applyQuickAdd(q)}
-                className="whitespace-nowrap px-3 py-1.5 bg-slate-50 hover:bg-teal-50 hover:text-teal-700 border border-slate-200 rounded-full text-xs font-medium transition-colors"
+                className="whitespace-nowrap px-4 py-2 bg-slate-50 hover:bg-teal-50 hover:text-teal-700 border border-slate-200 rounded-full text-sm font-medium transition-colors active:scale-95"
               >
                 {q.name}
               </button>
@@ -179,7 +179,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
             <label className="text-sm font-medium text-slate-600">Date & Time</label>
             <input 
               type="datetime-local" 
-              className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
+              className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-base"
               value={newLog.date}
               onChange={e => setNewLog({...newLog, date: e.target.value})}
             />
@@ -190,17 +190,17 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
             <input 
               type="text" 
               placeholder="e.g. Cream of Rice, Egg Whites"
-              className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
+              className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-base"
               value={newLog.food}
               onChange={e => setNewLog({...newLog, food: e.target.value})}
             />
           </div>
 
           {/* Clinical Data Section (Texture, Meds, Stool) */}
-          <div className="md:col-span-2 border rounded-lg border-slate-200 overflow-hidden">
+          <div className="md:col-span-2 border rounded-xl border-slate-200 overflow-hidden">
              <button 
               onClick={() => setShowClinical(!showClinical)}
-              className="w-full flex items-center justify-between p-3 bg-slate-50 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+              className="w-full flex items-center justify-between p-4 bg-slate-50 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <Pill className="w-4 h-4 text-indigo-500" />
@@ -214,7 +214,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                 <div className="space-y-1">
                    <label className="text-xs font-bold text-slate-500 uppercase">Meal Texture</label>
                    <select 
-                     className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                     className="w-full p-3 border border-slate-200 rounded-xl text-sm bg-white"
                      value={newLog.texture}
                      onChange={(e) => setNewLog({...newLog, texture: e.target.value as MealTexture})}
                    >
@@ -228,10 +228,10 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                    <label className="text-xs font-bold text-slate-500 uppercase">Medication</label>
                    <div 
                     onClick={() => setNewLog({...newLog, medicationTaken: !newLog.medicationTaken})}
-                    className={`cursor-pointer p-2 border rounded-lg text-sm flex items-center gap-2 ${newLog.medicationTaken ? 'bg-green-50 border-green-200 text-green-700' : 'border-slate-200 text-slate-500'}`}
+                    className={`cursor-pointer p-3 border rounded-xl text-sm flex items-center gap-2 ${newLog.medicationTaken ? 'bg-green-50 border-green-200 text-green-700' : 'border-slate-200 text-slate-500'}`}
                    >
-                     <div className={`w-4 h-4 rounded border flex items-center justify-center ${newLog.medicationTaken ? 'bg-green-500 border-green-500' : 'border-slate-300'}`}>
-                       {newLog.medicationTaken && <div className="w-2 h-2 bg-white rounded-sm" />}
+                     <div className={`w-5 h-5 rounded border flex items-center justify-center ${newLog.medicationTaken ? 'bg-green-500 border-green-500' : 'border-slate-300'}`}>
+                       {newLog.medicationTaken && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
                      </div>
                      Prokinetic Taken (30m prior)
                    </div>
@@ -240,9 +240,10 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                    <label className="text-xs font-bold text-slate-500 uppercase">Bristol Stool (1-7)</label>
                    <input 
                      type="number" 
+                     inputMode="decimal"
                      min="1" 
                      max="7"
-                     className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                     className="w-full p-3 border border-slate-200 rounded-xl text-sm"
                      placeholder="Score 1-7 (Optional)"
                      value={newLog.bristolScore || ''}
                      onChange={e => setNewLog({...newLog, bristolScore: parseInt(e.target.value) as BristolScale})}
@@ -253,10 +254,10 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
           </div>
 
           {/* Macros Toggle Section */}
-          <div className="md:col-span-2 border rounded-lg border-slate-200 overflow-hidden">
+          <div className="md:col-span-2 border rounded-xl border-slate-200 overflow-hidden">
             <button 
               onClick={() => setShowMacros(!showMacros)}
-              className="w-full flex items-center justify-between p-3 bg-slate-50 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+              className="w-full flex items-center justify-between p-4 bg-slate-50 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
             >
               <div className="flex items-center gap-2">
                  <Zap className="w-4 h-4 text-orange-500" />
@@ -270,35 +271,35 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-2">
                   <div className="space-y-1">
                     <label className="text-xs text-slate-500 uppercase font-bold">Calories</label>
-                    <input type="number" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.calories || ''} onChange={e => updateNutrition('calories', e.target.value)} />
+                    <input type="number" inputMode="decimal" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.calories || ''} onChange={e => updateNutrition('calories', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-slate-500 uppercase font-bold">Protein (g)</label>
-                    <input type="number" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.protein || ''} onChange={e => updateNutrition('protein', e.target.value)} />
+                    <input type="number" inputMode="decimal" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.protein || ''} onChange={e => updateNutrition('protein', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-slate-500 uppercase font-bold">Carbs (g)</label>
-                    <input type="number" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.carbs || ''} onChange={e => updateNutrition('carbs', e.target.value)} />
+                    <input type="number" inputMode="decimal" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.carbs || ''} onChange={e => updateNutrition('carbs', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-slate-500 uppercase font-bold">Fat (g)</label>
-                    <input type="number" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.fat || ''} onChange={e => updateNutrition('fat', e.target.value)} />
+                    <input type="number" inputMode="decimal" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.fat || ''} onChange={e => updateNutrition('fat', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-slate-500 uppercase font-bold">Fiber (g)</label>
-                    <input type="number" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.fiber || ''} onChange={e => updateNutrition('fiber', e.target.value)} />
+                    <input type="number" inputMode="decimal" className="w-full p-2 border border-slate-200 rounded-md text-sm" value={newLog.nutrition?.fiber || ''} onChange={e => updateNutrition('fiber', e.target.value)} />
                   </div>
                 </div>
                 
                 {/* Real-time warnings */}
                 {fatWarning && (
                   <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100">
-                    <AlertTriangle className="w-3 h-3" /> Warning: High fat (&gt;10g) drastically slows gastric emptying.
+                    <AlertTriangle className="w-3 h-3" /> Warning: High fat (>10g) drastically slows gastric emptying.
                   </div>
                 )}
                 {fiberWarning && (
                   <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100 mt-1">
-                    <AlertTriangle className="w-3 h-3" /> Warning: High fiber (&gt;3g) increases bezoar risk.
+                    <AlertTriangle className="w-3 h-3" /> Warning: High fiber (>3g) increases bezoar risk.
                   </div>
                 )}
               </div>
@@ -310,8 +311,9 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
               <label className="text-sm font-medium text-slate-600">BS Before</label>
               <input 
                 type="number" 
+                inputMode="decimal"
                 placeholder="mmol/L"
-                className="w-full p-2 border border-slate-300 rounded-lg"
+                className="w-full p-3 border border-slate-300 rounded-xl"
                 value={newLog.bloodSugarBefore}
                 onChange={e => setNewLog({...newLog, bloodSugarBefore: e.target.value})}
               />
@@ -320,8 +322,9 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
               <label className="text-sm font-medium text-slate-600">BS 2hr After</label>
               <input 
                 type="number" 
+                inputMode="decimal"
                 placeholder="mmol/L"
-                className="w-full p-2 border border-slate-300 rounded-lg"
+                className="w-full p-3 border border-slate-300 rounded-xl"
                 value={newLog.bloodSugarAfter}
                 onChange={e => setNewLog({...newLog, bloodSugarAfter: e.target.value})}
               />
@@ -331,7 +334,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
            <div className="space-y-2">
             <label className="text-sm font-medium text-slate-600">Activity After Meal</label>
             <select 
-              className="w-full p-2 border border-slate-300 rounded-lg bg-white"
+              className="w-full p-3 border border-slate-300 rounded-xl bg-white"
               value={newLog.activity}
               onChange={e => setNewLog({...newLog, activity: e.target.value as any})}
             >
@@ -348,7 +351,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                 <button
                   key={sym}
                   onClick={() => toggleSymptom(sym)}
-                  className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                  className={`px-4 py-2 rounded-full text-sm border transition-all active:scale-95 ${
                     newLog.symptoms?.includes(sym)
                       ? 'bg-red-50 border-red-200 text-red-700 font-medium'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
@@ -379,7 +382,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
         <div className="mt-6">
           <button 
             onClick={handleAddLog}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg transition-all shadow-md active:scale-[0.99]"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-xl transition-all shadow-md active:scale-[0.98] text-lg"
           >
             Log Entry
           </button>
@@ -390,17 +393,17 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
         <h3 className="text-lg font-semibold text-slate-800">History</h3>
         <button 
           onClick={exportToCSV}
-          className="flex items-center gap-2 text-sm text-teal-700 hover:text-teal-800 font-medium bg-teal-50 px-3 py-2 rounded-lg"
+          className="flex items-center gap-2 text-sm text-teal-700 hover:text-teal-800 font-medium bg-teal-50 px-4 py-2 rounded-lg"
         >
           <Download className="w-4 h-4" />
           Export CSV
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 pb-24 md:pb-0">
         {logs.length === 0 && <p className="text-slate-500 italic text-center py-8">No logs yet. Start tracking above.</p>}
         {logs.map(log => (
-          <div key={log.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div key={log.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm active:bg-slate-50 transition-colors">
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-baseline gap-2">
@@ -422,7 +425,7 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                   )}
                 </div>
               </div>
-              <button onClick={() => handleDeleteLog(log.id)} className="text-slate-400 hover:text-red-500">
+              <button onClick={() => handleDeleteLog(log.id)} className="text-slate-400 hover:text-red-500 p-2">
                 <Trash2 className="w-5 h-5" />
               </button>
             </div>

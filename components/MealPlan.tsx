@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RECIPES } from '../constants';
 import { Clock, Info, CheckCircle2, Circle, ChefHat, Droplet, Utensils, Filter, Plus, X, Sun, Moon, Coffee, Milk, Soup } from 'lucide-react';
 import { MealItem, MealTexture } from '../types';
+import { safeLocalStorage } from '../utils/storage';
 
 interface MealPlanProps {
   flareMode: boolean;
@@ -56,7 +57,7 @@ const MealPlan: React.FC<MealPlanProps> = ({ flareMode, mealPlan, setMealPlan })
     });
 
     setMealPlan(updated);
-    localStorage.setItem('gastroMealPlan', JSON.stringify(updated)); // Persist custom meals
+    safeLocalStorage.setItem('gastroMealPlan', updated); // Persist custom meals safely
     setShowAddMeal(false);
     setNewMeal({ time: '12:00 PM', title: '', items: [], notes: '', icon: 'Utensils', flareFriendly: false });
     setTempItems('');
