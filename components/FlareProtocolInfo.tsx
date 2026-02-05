@@ -97,7 +97,7 @@ const FlareProtocolInfo: React.FC<FlareProtocolInfoProps> = ({ onClose }) => {
           <section>
              <h3 className="text-lg font-bold text-slate-800 mb-2">Expected Outcomes</h3>
              <p className="text-slate-600">
-               The goal of this protocol is to give the stomach muscles "mechanical rest". By removing solids, we allow gravity to empty the stomach without requiring strong contractions. Most patients see a reduction in nausea within 24-48 hours. If vomiting persists > 48 hours despite this protocol, seek medical attention.
+               The goal of this protocol is to give the stomach muscles "mechanical rest". By removing solids, we allow gravity to empty the stomach without requiring strong contractions. Most patients see a reduction in nausea within 24-48 hours. If vomiting persists &gt; 48 hours despite this protocol, seek medical attention.
              </p>
           </section>
 

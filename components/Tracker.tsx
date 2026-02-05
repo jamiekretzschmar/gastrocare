@@ -293,12 +293,12 @@ const Tracker: React.FC<TrackerProps> = ({ logs, setLogs }) => {
                 {/* Real-time warnings */}
                 {fatWarning && (
                   <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100">
-                    <AlertTriangle className="w-3 h-3" /> Warning: High fat (>10g) drastically slows gastric emptying.
+                    <AlertTriangle className="w-3 h-3" /> Warning: High fat (&gt;10g) drastically slows gastric emptying.
                   </div>
                 )}
                 {fiberWarning && (
                   <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100 mt-1">
-                    <AlertTriangle className="w-3 h-3" /> Warning: High fiber (>3g) increases bezoar risk.
+                    <AlertTriangle className="w-3 h-3" /> Warning: High fiber (&gt;3g) increases bezoar risk.
                   </div>
                 )}
               </div>
