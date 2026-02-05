@@ -1,0 +1,5 @@
+{
+  "name": "GastroCare Sync",
+  "description": "A clinical management system for Gastroparesis and Immunosuppressed patients. Features Flare-Up protocols, Motility timers, Dietary tracking, and AI guidance based on Hamilton Health Sciences protocols.",
+  "requestFramePermissions": []
+}
