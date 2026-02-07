@@ -112,4 +112,3 @@ const AiAssistant: React.FC<AiAssistantProps> = ({ logs }) => {
   );
 };
 
-export default AiAssistant;

@@ -115,4 +115,3 @@ const Analytics: React.FC<AnalyticsProps> = ({ logs }) => {
   );
 };
 
-export default Analytics;

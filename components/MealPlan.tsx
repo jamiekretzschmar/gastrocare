@@ -240,4 +240,3 @@ const MealPlan: React.FC<MealPlanProps> = ({ flareMode, mealPlan, setMealPlan })
   );
 };
 
-export default MealPlan;

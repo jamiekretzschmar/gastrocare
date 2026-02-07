@@ -141,4 +141,3 @@ const GastroparesisEducation: React.FC = () => {
   );
 };
 
-export default GastroparesisEducation;

@@ -113,4 +113,3 @@ const HamiltonGuide: React.FC = () => {
   );
 };
 
-export default HamiltonGuide;

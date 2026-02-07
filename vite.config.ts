@@ -5,10 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
+    host: true
   },
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true
-  }
+  // This tells Vite your project lives in the root, not /src
+  root: './'
 });

@@ -95,26 +95,33 @@ const MedicationManager: React.FC<MedicationManagerProps> = ({ medications, setM
         <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 animate-in fade-in slide-in-from-top-2">
           <h3 className="font-semibold text-slate-700 mb-3">Add New Medication</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input 
-              type="text" 
-              placeholder="Medication Name (e.g. Domperidone)"
-              className="p-2 border border-slate-300 rounded-lg text-sm"
-              value={newMed.name}
-              onChange={e => setNewMed({...newMed, name: e.target.value})}
-            />
-             <input 
-              type="text" 
-              placeholder="Dosage (e.g. 10mg)"
-              className="p-2 border border-slate-300 rounded-lg text-sm"
-              value={newMed.dosage}
-              onChange={e => setNewMed({...newMed, dosage: e.target.value})}
-            />
-             <input 
-              type="time" 
-              className="p-2 border border-slate-300 rounded-lg text-sm"
-              value={newMed.time}
-              onChange={e => setNewMed({...newMed, time: e.target.value})}
-            />
+<input
+  type="text"
+  placeholder="Medication Name"
+  className="p-2 border border-slate-200 rounded text-sm"
+  value={newMed.name}
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+    setNewMed({...newMed, name: e.target.value})
+  }
+/>
+<input
+  type="text"
+  placeholder="Dosage (e.g. 10mg)"
+  className="p-2 border border-slate-200 rounded text-sm"
+  value={newMed.dosage}
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+    setNewMed({...newMed, dosage: e.target.value})
+  }
+/>
+<input
+  type="time"
+  className="p-2 border border-slate-200 rounded text-sm"
+  value={newMed.time}
+  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+    setNewMed({...newMed, time: e.target.value})
+  }
+/>
+
           </div>
           <button 
             onClick={handleAdd}
@@ -130,8 +137,9 @@ const MedicationManager: React.FC<MedicationManagerProps> = ({ medications, setM
         {medications.length === 0 && !isAdding && (
           <p className="text-center text-slate-400 italic py-4">No medications added yet.</p>
         )}
-        {medications.sort((a,b) => a.time.localeCompare(b.time)).map(med => (
-          <div key={med.id} className={`flex items-center justify-between p-4 rounded-lg border transition-all ${med.enabled ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100 opacity-60'}`}>
+     {medications
+  .sort((a: any, b: any) => a.time.localeCompare(b.time)) .map((med: any) => (
+                  <div key={med.id} className={`flex items-center justify-between p-4 rounded-lg border transition-all ${med.enabled ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100 opacity-60'}`}>
             <div className="flex items-center gap-4">
               <div className="bg-indigo-50 p-2 rounded-full text-indigo-600">
                 <Clock className="w-5 h-5" />
@@ -167,4 +175,3 @@ const MedicationManager: React.FC<MedicationManagerProps> = ({ medications, setM
   );
 };
 
-export default MedicationManager;

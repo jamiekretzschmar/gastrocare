@@ -187,4 +187,3 @@ const HydrationTracker: React.FC<HydrationTrackerProps> = ({
   );
 };
 
-export default HydrationTracker;

@@ -123,4 +123,3 @@ const NutrientSummary: React.FC<NutrientSummaryProps> = ({ logs, flareMode }) =>
   );
 };
 
-export default NutrientSummary;

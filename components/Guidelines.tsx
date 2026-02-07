@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GUIDELINES } from '../constants';
 import { ShieldAlert, Activity, Utensils, AlertTriangle, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
-import GastroparesisEducation from './GastroparesisEducation';
+import { GastroparesisEducation } from './GastroparesisEducation';
 
 const Guidelines: React.FC = () => {
   const [showEducation, setShowEducation] = useState(true);
@@ -87,4 +87,3 @@ const Guidelines: React.FC = () => {
   );
 };
 
-export default Guidelines;

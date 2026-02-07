@@ -93,4 +93,3 @@ const UprightTimer: React.FC = () => {
   );
 };
 
-export default UprightTimer;
